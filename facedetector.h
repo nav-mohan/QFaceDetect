@@ -10,6 +10,9 @@
 #include <opencv2/objdetect.hpp>
 
 #include "videowidget.h"
+#define SCORE_THRESHOLD 0.6
+#define NMS_THRESHOLD 0.3
+#define TOP_K 2000
 
 class FaceDetector : public VideoWidget
 {

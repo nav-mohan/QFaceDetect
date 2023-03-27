@@ -15,8 +15,8 @@
 #include "videosurface.h"
 #include "facedetector.h"
 
-#define CAMERA_WIDGET_WIDTH 1920
-#define CAMERA_WIDGET_HEIGHT 1080
+#define CAMERA_WIDGET_WIDTH 1280
+#define CAMERA_WIDGET_HEIGHT 720
 
 class CameraWidget : public QWidget
 {

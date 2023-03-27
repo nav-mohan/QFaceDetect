@@ -44,10 +44,7 @@ void VideoWidget::setFrame(const QVideoFrame &frame)
     {
         unsigned int bytesPerSample = localFrame.bytesPerLine() / localFrame.width() / 4;
         if(bytesPerSample == sizeof(unsigned char))
-        {
-            // qDebug("Writing to m_videoTexture");
             m_videoTexture->setData(QOpenGLTexture::BGRA, QOpenGLTexture::UInt8, (const void *)localFrame.bits());
-        }
     }
     localFrame.unmap();
     process();
@@ -90,6 +87,7 @@ void VideoWidget::initialize()
     m_program.setUniformValue("qt_flip",true);
     m_program.release();
     qDebug("VideoWidget::initialize");
+    initializeStreamer();
 }
 
 void VideoWidget::resizeGL(int W, int H){resize(W,H);}
@@ -125,4 +123,16 @@ void VideoWidget::paint()
     m_IBO.release();
     m_VBO.release();
     m_program.release();
+}
+
+void VideoWidget::initializeStreamer()
+{
+    m_streamThread = new QThread();
+    m_streamer = new Streamer();
+    m_streamer->moveToThread(m_streamThread);
+    connect(m_streamThread,&QThread::started,m_streamer,&Streamer::initialize);
+    connect(this,&VideoWidget::streamData, m_streamer,&Streamer::streamData);
+    m_streamThread->start();
+
+
 }

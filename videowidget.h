@@ -9,6 +9,7 @@
 #include <QGuiApplication>
 #include <QApplication>
 #include <QScreen>
+#include <QThread>
 
 #include <QOpenGLWidget>
 #include <QOpenGLBuffer>
@@ -18,6 +19,8 @@
 #include <QOpenGLTexture>
 #include <QOpenGLFramebufferObject>
 
+
+#include "streamer.h"
 
 class VideoWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -31,6 +34,10 @@ public:
     virtual void initialize();
     virtual void paint();
     virtual void resize(int W, int H);
+    
+    QThread *m_streamThread;
+    virtual void initializeStreamer();
+    Streamer *m_streamer;
 
 protected:
     void initializeGL() override;
@@ -44,6 +51,10 @@ protected:
     QOpenGLTexture *m_videoTexture;
     int m_frameWidth;
     int m_frameHeight;
+
+signals:
+    void streamData(uchar *bits);
+
 };
 
 #endif // VIDEOWIDGET_H
